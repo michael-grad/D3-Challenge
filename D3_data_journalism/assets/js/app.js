@@ -71,9 +71,9 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     label = "in Poverty %:";
   }
   else {
-    label = "# of Albums:";
+    label = "Age (Median";
   }
-
+  // DEBUG!! - not a function
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
@@ -95,7 +95,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 }
 
 // Retrieve data from the CSV file and execute everything below
-d3.csv("data/data.csv").then(function(chartData, err) {
+d3.csv("assets/data/data.csv").then(function(chartData, err) {
   if (err) throw err;
 
   // parse data
