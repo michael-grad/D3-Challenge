@@ -78,7 +78,7 @@ function makeResponsive() {
     else {
       label = "Age (Median)";
     }
-    // DEBUG!! - not a function
+    
     var toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([80, -60])
@@ -154,6 +154,15 @@ function makeResponsive() {
       .attr("r", 20)
       .attr("fill", "pink")
       .attr("opacity", ".5");
+    var stateGroup = chartGroup.selectAll("circle")
+    .data(chartData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xLinearScale(d[chosenXAxis]))
+    .attr("cy", d => yLinearScale(d.healthcare))
+    .attr("r", 10)
+    .text(d => d.abbr);
+
 
     // Create group for two x-axis labels
     var labelsGroup = chartGroup.append("g")
