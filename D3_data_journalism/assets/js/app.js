@@ -87,8 +87,8 @@ function makeResponsive() {
       });
 
     circlesGroup.call(toolTip);
-
-    circlesGroup.on("mouseover", function(data) {
+    // changed from circlesGroup to chartGroup
+    chartGroup.on("mouseover", function(data) {
       toolTip.show(data);
     })
       // onmouseout event
@@ -96,7 +96,7 @@ function makeResponsive() {
         toolTip.hide(data);
       });
 
-    return circlesGroup;
+    return chartGroup;
   }
 
   // Retrieve data from the CSV file and execute everything below
@@ -155,13 +155,13 @@ function makeResponsive() {
       .attr("fill", "pink")
       .attr("opacity", ".5");
     var stateGroup = chartGroup.selectAll("circle")
-    .data(chartData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", 10)
-    .text(d => d.abbr);
+      .data(chartData)
+      .enter()
+      .append("circle")
+      .attr("cx", d => xLinearScale(d[chosenXAxis]))
+      .attr("cy", d => yLinearScale(d.healthcare))
+      .attr("r", 10)
+      .text(d => d.abbr);
 
 
     // Create group for two x-axis labels
