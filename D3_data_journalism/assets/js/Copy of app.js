@@ -159,7 +159,7 @@ function makeResponsive() {
         toolTip.hide(data);
       }); // closing squigly bracket for mouseout event handler
 
-    return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
+    return chartGroup;
   }
 
   // VERIFIED AS WORKING
@@ -278,9 +278,7 @@ function makeResponsive() {
     //         -- displayed at bottom (not centered) and left of axis
     // Create group for 3 y-axis labels
     var labelsYGroup = chartGroup.append("g")
-      .attr("transform", `translate(${0 - 20}, ${height / 30})`) // changed from /2 to /30 to center along y axis
-      // .classed("centered", true);
-      .style("text-anchor", "middle"); // added .style to center text in g tag
+      .attr("transform", `translate(${0 - 20}, ${height / 2})`);
 
     // DEBUG!! -- was working, now no longer displayed  
     // append y axis
@@ -341,7 +339,7 @@ function makeResponsive() {
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
-          // DEBUG: Y AXIS LABELS NOT CENTERED
+          // DEBUG: WAS WORKING, NOT ANYMORE
           // updates tooltips with new info
           circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
@@ -412,40 +410,40 @@ function makeResponsive() {
           circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
           // change classes to change bold text
-          if (chosenYAxis === "smokes") {
-            smokeLabel
-              .classed("active", true)
-              .classed("inactive", false);
-            healthcareLabel
-              .classed("active", false)
-              .classed("inactive", true);
-            obeseLabel
-              .classed("active", false)
-              .classed("inactive", true);
-          }
-          else if (chosenYAxis === "healthcare") {
-            smokeLabel
-              .classed("active", false)
-              .classed("inactive", true);
-            healthcareLabel
-              .classed("active", true)
-              .classed("inactive", false);
-            obeseLabel
-              .classed("active", false)
-              .classed("inactive", true);
-          }
-          // else for chosenXAxis === "income"
-          else {
-            smokeLabel
-              .classed("active", false)
-              .classed("inactive", true);
-            healthcareLabel
-              .classed("active", false)
-              .classed("inactive", true);
-            obeseLabel
-              .classed("active", true)
-              .classed("inactive", false);
-          }
+          // if (chosenXAxis === "age") {
+          //   ageLabel
+          //     .classed("active", true)
+          //     .classed("inactive", false);
+          //   povertyLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          //   incomeLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          // }
+          // else if (chosenXAxis === "poverty") {
+          //   ageLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          //   povertyLabel
+          //     .classed("active", true)
+          //     .classed("inactive", false);
+          //   incomeLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          // }
+          // // else for chosenXAxis === "income"
+          // else {
+          //   ageLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          //   povertyLabel
+          //     .classed("active", false)
+          //     .classed("inactive", true);
+          //   incomeLabel
+          //     .classed("active", true)
+          //     .classed("inactive", false);
+          // }
         } // closing squigly bracket for 1st if statement (value !== chosenYAxis)
 
 

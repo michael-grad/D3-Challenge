@@ -29,3 +29,8 @@ body {
   margin: 0;
   font-size: 16px;
 }
+
+/* added to center y-axis labels */
+.centered {
+  text-anchor: middle
+}
