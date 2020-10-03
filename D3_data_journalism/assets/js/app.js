@@ -232,13 +232,20 @@ function makeResponsive() {
       .attr("r", 20)
       .attr("fill", "pink")
       .attr("opacity", ".5")
-      // DeBUG!! -- COMMENTED OUT
-      // .append("text") {
-      //   font_size: 12,
+      // DEBUG!! -- COMMENTED OUT
+      // append text modeled after Activity 16.2.1
+      .attr("class", function(d) {
+        return "stateCircle " + d.abbr;
+      })
+      // .append("text")  // append a text tag with the following properties.
+      //   fontSize: 12,
       //   color: black,
       //   state_text:  
-      // }
-      .text(d => d.abbr);
+      // // }
+      // .html(function(d) {
+      //   return `<p>${d => d.abbr}</p>`;
+      // });
+     .text (d => `${d.abbr}`); // also tried d => d.abbr
     //  DEBUG!! -- State abbr not displaying on chart
 
     // // COMMENTED OUT - PROBLEMSOLVE
@@ -471,6 +478,7 @@ function makeResponsive() {
   }); // closing squickly brackets for d3.csv reading of raw data 
 } // closing squickly brackets for function makeResponsive 
 
+// function makeResponsive modeled after Activity 16.3.5
 // When the browser loads, makeResponsive() is called.
 makeResponsive();
 
