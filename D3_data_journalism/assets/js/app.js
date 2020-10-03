@@ -107,60 +107,60 @@ function makeResponsive() {
   // NOT TESTED YET - SHOULD BE WORKING
   // Every time this function is called the same parameters are used
   // function used for updating circles group with new tooltip
-  function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
-    // QUESTION:  WHAT DOES lable = .... do?
+  // function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
+  //   // QUESTION:  WHAT DOES lable = .... do?
 
-    //PROBLEMSOLVE COMMENTED OUT
-    var label;
+  //   //PROBLEMSOLVE COMMENTED OUT
+  //   var label;
 
-    if (chosenXAxis === "poverty") {
-      label = "in Poverty (%):";
+  //   if (chosenXAxis === "poverty") {
+  //     label = "in Poverty (%):";
 
-      var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      // ADDED (d,i) - that did not solve d.state issue.  removed (d,i)
-      .html(function () {
-        // DEBUG!! -- CANNOT READ d.state.  THIS WAS WORKING - why is it not now?
-        return (`${d.state}<br>Poverty: ${d.poverty} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-      }); // closing squigly bracket for .html(function(d)
-    } // closing squigly bracket for if statement
-    else if (chosenXAxis === "age") {
-      label = "Age (Median):";
+  //     var toolTip = d3.tip()
+  //     .attr("class", "tooltip")
+  //     .offset([80, -60])
+  //     // ADDED (d,i) - that did not solve d.state issue.  removed (d,i)
+  //     .html(function (d) {
+  //       // DEBUG!! -- CANNOT READ d.state.  THIS WAS WORKING - why is it not now?
+  //       return (`${d.state}<br>Poverty: ${d.poverty} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
+  //     }); // closing squigly bracket for .html(function(d)
+  //   } // closing squigly bracket for if statement
+  //   else if (chosenXAxis === "age") {
+  //     label = "Age (Median):";
 
-      var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function (d) {
-        return (`${d.state}<br>Poverty: ${d.age} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-      }); // closing squigly bracket for .html(function(d)
-    } // closing squigly bracket for else if statement
-    else if (chosenXAxis === "income") {
-      label = "Household Income (Median):";
+  //     var toolTip = d3.tip()
+  //     .attr("class", "tooltip")
+  //     .offset([80, -60])
+  //     .html(function (d) {
+  //       return (`${d.state}<br>Poverty: ${d.age} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
+  //     }); // closing squigly bracket for .html(function(d)
+  //   } // closing squigly bracket for else if statement
+  //   else if (chosenXAxis === "income") {
+  //     label = "Household Income (Median):";
 
-      var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      // changed d to data in function argument - didn't change anything so changed back
-      .html(function (d) {
-        return (`${d.state}<br>Poverty: ${d.income} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-      }); // closing squigly bracket for .html(function(d)
-    } // closing squigly bracket for else if statement
+  //     var toolTip = d3.tip()
+  //     .attr("class", "tooltip")
+  //     .offset([80, -60])
+  //     // changed d to data in function argument - didn't change anything so changed back
+  //     .html(function (d) {
+  //       return (`${d.state}<br>Poverty: ${d.income} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
+  //     }); // closing squigly bracket for .html(function(d)
+  //   } // closing squigly bracket for else if statement
 
-    // NOT TESTED YET
-    circlesGroup.call(toolTip);
-    // changed from circlesGroup to chartGroup -- NOT VERIFIED UNTIL STATE ABBR DISPLAYS
-    chartGroup.on("mouseover", function (data) {
-      // DEBUG!! -- ERROR MESSAGE IN CONSOLE. This was working, why not now?
-      toolTip.show(data);
-    }) // closing squigly bracket for mouseover event handler
-      // onmouseout event
-      .on("mouseout", function (data, index) {
-        toolTip.hide(data);
-      }); // closing squigly bracket for mouseout event handler
+  //   // NOT TESTED YET
+  //   circlesGroup.call(toolTip);
+  //   // changed from circlesGroup to chartGroup -- NOT VERIFIED UNTIL STATE ABBR DISPLAYS
+  //   chartGroup.on("mouseover", function (data) {
+  //     // DEBUG!! -- ERROR MESSAGE IN CONSOLE. This was working, why not now?
+  //     toolTip.show(data);
+  //   }) // closing squigly bracket for mouseover event handler
+  //     // onmouseout event
+  //     .on("mouseout", function (data, index) {
+  //       toolTip.hide(data);
+  //     }); // closing squigly bracket for mouseout event handler
 
-    return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
-  }
+  //   return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
+  // }
 
   // VERIFIED AS WORKING
   // Retrieve data from the CSV file and execute everything below
@@ -214,9 +214,11 @@ function makeResponsive() {
     // VERIFIED AS WORKING
     // QUESTION:  WHAT IS chartGroup?
     // append y axis
-    chartGroup.append("g") // added var yAxis =
+    var yAxis = chartGroup.append("g") // added var yAxis =
       .classed("y-axis", true) // added
       .call(leftAxis);
+
+    
 
     // VERIFIED AS WORKING
     // append initial circles
@@ -229,19 +231,26 @@ function makeResponsive() {
       .attr("cy", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
       .attr("r", 20)
       .attr("fill", "pink")
-      .attr("opacity", ".5");
-    // DEBUG!! -- State abbr not displaying on chart
-
-    // COMMENTED OUT - PROBLEMSOLVE
-    var stateGroup = chartGroup.selectAll("circle")
-      .data(chartData)
-      .enter()
-      .append("circle")
-      .attr("cx", d => xLinearScale(d[chosenXAxis]))
-      // DEBUG!! -- // changed and now 2nd x axis not working
-      .attr("cy", d => yLinearScale(d.healthcare)) // changed from d.healthcare to d[chosenYAxis]
-      .attr("r", 10)
+      .attr("opacity", ".5")
+      // DeBUG!! -- COMMENTED OUT
+      // .append("text") {
+      //   font_size: 12,
+      //   color: black,
+      //   state_text:  
+      // }
       .text(d => d.abbr);
+    //  DEBUG!! -- State abbr not displaying on chart
+
+    // // COMMENTED OUT - PROBLEMSOLVE
+    // var stateGroup = chartGroup.selectAll("circle")
+    //   .data(chartData)
+    //   .enter()
+    //   .append("circle")
+    //   .attr("cx", d => xLinearScale(d[chosenXAxis]))
+    //   // DEBUG!! -- // changed and now 2nd x axis not working
+    //   .attr("cy", d => yLinearScale(d.healthcare)) // changed from d.healthcare to d[chosenYAxis]
+    //   .attr("r", 10)
+    //   .text(d => d.abbr);
 
     // VERIFIED AS WORKING
     // Create group for 3 x-axis labels
@@ -294,7 +303,9 @@ function makeResponsive() {
       .attr("y", 0 - 45) // changed - margin.left to - 45
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
+      .attr("value", "healthcare")
       .classed("axis-text", true)
+      .classed("active", true)
       .text("Lacks Healthcare (%)");
     // DEBUG!! -- added and now 2nd x axis not working
     var smokesLabel = labelsYGroup.append("text")
@@ -302,21 +313,24 @@ function makeResponsive() {
       .attr("y", 0 - 65)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
+      .attr("value", "smokes")
       .classed("axis-text", true)
+      .classed("inactive", true)
       .text("Smokes (%)");
 
-    var obeseLabel = labelsYGroup.append("text")
+    var obesityLabel = labelsYGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - 85)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
+      .attr("value", "obesity")
       .classed("axis-text", true)
+      .classed("inactive", true)
       .text("Obese (%)");
 
     // NOT TESTED YET - SHOULD BE WORKING
     // updateToolTip function above csv import.  Removed var from line 183
-    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
+    // var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
     // x axis labels event listener
     labelsXGroup.selectAll("text")
       .on("click", function () {
@@ -344,7 +358,7 @@ function makeResponsive() {
 
           // DEBUG: Y AXIS LABELS NOT CENTERED
           // updates tooltips with new info
-          circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+          // circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
           // COMMENTED OUT: PROBLEM SOLVE
           // change classes to change bold text
@@ -410,40 +424,40 @@ function makeResponsive() {
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
           // updates tooltips with new info
-          circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+          // circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
           // change classes to change bold text
           if (chosenYAxis === "smokes") {
-            smokeLabel
+            smokesLabel
               .classed("active", true)
               .classed("inactive", false);
             healthcareLabel
               .classed("active", false)
               .classed("inactive", true);
-            obeseLabel
+            obesityLabel
               .classed("active", false)
               .classed("inactive", true);
           }
           else if (chosenYAxis === "healthcare") {
-            smokeLabel
+            smokesLabel
               .classed("active", false)
               .classed("inactive", true);
             healthcareLabel
               .classed("active", true)
               .classed("inactive", false);
-            obeseLabel
+              obesityLabel
               .classed("active", false)
               .classed("inactive", true);
           }
           // else for chosenXAxis === "income"
-          else {
-            smokeLabel
+          else if (chosenYAxis === "obesity") {
+            smokesLabel
               .classed("active", false)
               .classed("inactive", true);
             healthcareLabel
               .classed("active", false)
               .classed("inactive", true);
-            obeseLabel
+              obesityLabel
               .classed("active", true)
               .classed("inactive", false);
           }
