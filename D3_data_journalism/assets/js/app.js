@@ -78,7 +78,7 @@ function makeResponsive() {
   // Every time this function is called the same parameters are used
   // function used for updating yAxis var upon click on axis label
   function renderYAxes(newYScale, yAxis) {
-    var leftAxis = d3.axisBottom(newYScale);
+    var leftAxis = d3.axisLeft(newYScale);
 
     yAxis.transition()
       .duration(1000)
@@ -214,7 +214,8 @@ function makeResponsive() {
     // VERIFIED AS WORKING
     // QUESTION:  WHAT IS chartGroup?
     // append y axis
-    chartGroup.append("g")
+    chartGroup.append("g") // added var yAxis =
+      .classed("y-axis", true) // added
       .call(leftAxis);
 
     // VERIFIED AS WORKING
