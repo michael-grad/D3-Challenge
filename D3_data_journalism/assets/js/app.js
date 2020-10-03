@@ -91,7 +91,7 @@ function makeResponsive() {
   // Every time this function is called the same parameters are used
   // function used for updating circles group with a transition to
   // new circles
-  function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+  function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis, stateGroup) {
 
     circlesGroup.transition()
       .duration(1000)
@@ -100,6 +100,14 @@ function makeResponsive() {
       .attr("cx", d => newXScale(d[chosenXAxis]))
       // console.log(chosenYAxis);
       .attr("cy", d => newYScale(d[chosenYAxis])); // changed [chosenYAxis] to d.healthcare - no impact
+
+      stateGroup.transition()
+      .duration(1000)
+      // DEBUG!! -- Upon clicking alternate xLabel, this line has error message in console
+      //            Cannot read property 'age' of undefined
+      .attr("dx", d => newXScale(d[chosenXAxis]))
+      // console.log(chosenYAxis);
+      .attr("dy", d => newYScale(d[chosenYAxis])); // changed [chosenYAxis] to d.healthcare - no impact
 
     return circlesGroup;
   }  // closing squigly bracket for function renderCircles
@@ -250,18 +258,18 @@ function makeResponsive() {
 
     // DEBUG!! -- State abbr not displaying on chart
     var stateGroup = chartGroup.selectAll(".text-label")
-      .data(chartData)
-      .enter()
-      .append("text")
-      .attr("class", "text-label")
-      .attr("text-anchor", "middle")
-      .text(function(d) {
-        d.abbr;})
-      .attr("x", d => xLinearScale(d[chosenXAxis]))
-      // DEBUG!! -- // changed and now 2nd x axis not working
-      .attr("y", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
-      .attr("fill", "black")
-      .attr("font-family", "sans-serif")
+    .data(chartData)
+    .enter()
+    .append("text")
+    .text(function(d) {
+      return d.abbr;}) // removed ; between abbr and }
+    .attr("dx", d => xLinearScale(d[chosenXAxis]))
+    // // DEBUG!! -- // changed and now 2nd x axis not working
+    .attr("dy", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
+    .attr("class", "text-label") // moved from .append to after .text
+    .attr("text-anchor", "middle") // moved to after .text
+    .attr("fill", "black")
+    .attr("font-family", "sans-serif");
 
     // VERIFIED AS WORKING
     // Create group for 3 x-axis labels
@@ -365,7 +373,7 @@ function makeResponsive() {
 
           // DEBUG: WAS WORKING, NOT ANYMORE
           // updates circles with new x values
-          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis, stateGroup);
 
           // DEBUG: Y AXIS LABELS NOT CENTERED
           // updates tooltips with new info
@@ -432,7 +440,7 @@ function makeResponsive() {
           yAxis = renderYAxes(yLinearScale, yAxis);
 
           // updates circles with new x values
-          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis, stateGroup);
 
           // updates tooltips with new info
           // circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
