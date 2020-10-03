@@ -232,7 +232,7 @@ function makeResponsive() {
       .attr("r", 20)
       .attr("fill", "pink")
       .attr("opacity", ".5")
-      // DEBUG!! -- COMMENTED OUT
+      // DEBUG!! -- State abbr not dispalying on chart, but is in the html in inspector
       // append text modeled after Activity 16.2.1
       .attr("class", function(d) {
         return "stateCircle " + d.abbr;
@@ -248,16 +248,20 @@ function makeResponsive() {
      .text (d => `${d.abbr}`); // also tried d => d.abbr
     //  DEBUG!! -- State abbr not displaying on chart
 
-    // // COMMENTED OUT - PROBLEMSOLVE
-    // var stateGroup = chartGroup.selectAll("circle")
-    //   .data(chartData)
-    //   .enter()
-    //   .append("circle")
-    //   .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    //   // DEBUG!! -- // changed and now 2nd x axis not working
-    //   .attr("cy", d => yLinearScale(d.healthcare)) // changed from d.healthcare to d[chosenYAxis]
-    //   .attr("r", 10)
-    //   .text(d => d.abbr);
+    // DEBUG!! -- State abbr not displaying on chart
+    var stateGroup = chartGroup.selectAll(".text-label")
+      .data(chartData)
+      .enter()
+      .append("text")
+      .attr("class", "text-label")
+      .attr("text-anchor", "middle")
+      .text(function(d) {
+        d.abbr;})
+      .attr("x", d => xLinearScale(d[chosenXAxis]))
+      // DEBUG!! -- // changed and now 2nd x axis not working
+      .attr("y", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
+      .attr("fill", "black")
+      .attr("font-family", "sans-serif")
 
     // VERIFIED AS WORKING
     // Create group for 3 x-axis labels
