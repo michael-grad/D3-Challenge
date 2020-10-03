@@ -119,55 +119,48 @@ function makeResponsive() {
   //   // QUESTION:  WHAT DOES lable = .... do?
 
   //   //PROBLEMSOLVE COMMENTED OUT
-  //   var label;
+    var label;
 
-  //   if (chosenXAxis === "poverty") {
-  //     label = "in Poverty (%):";
+    
+    label = "in Poverty (%):";
 
-  //     var toolTip = d3.tip()
-  //     .attr("class", "tooltip")
-  //     .offset([80, -60])
-  //     // ADDED (d,i) - that did not solve d.state issue.  removed (d,i)
-  //     .html(function (d) {
-  //       // DEBUG!! -- CANNOT READ d.state.  THIS WAS WORKING - why is it not now?
-  //       return (`${d.state}<br>Poverty: ${d.poverty} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-  //     }); // closing squigly bracket for .html(function(d)
-  //   } // closing squigly bracket for if statement
-  //   else if (chosenXAxis === "age") {
-  //     label = "Age (Median):";
+    var toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([80, -60])
+    // ADDED (d,i) - that did not solve d.state issue.  removed (d,i)
+    .html(function (d) {
+      // DEBUG!! -- CANNOT READ d.state.  THIS WAS WORKING - why is it not now?
+      return (`${d.state}<br>Poverty: ${d[chosenXAxis]} <br>Lacks Healthcare: ${d[chosenYAxis]}`);
+    }); // closing squigly bracket for .html(function(d)
+    svg.call(toolTip);
+    // closing squigly bracket for if statement
+    // else if (chosenXAxis === "age") {
+    //   label = "Age (Median):";
 
-  //     var toolTip = d3.tip()
-  //     .attr("class", "tooltip")
-  //     .offset([80, -60])
-  //     .html(function (d) {
-  //       return (`${d.state}<br>Poverty: ${d.age} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-  //     }); // closing squigly bracket for .html(function(d)
-  //   } // closing squigly bracket for else if statement
-  //   else if (chosenXAxis === "income") {
-  //     label = "Household Income (Median):";
+    //   var toolTip = d3.tip()
+    //   .attr("class", "tooltip")
+    //   .offset([80, -60])
+    //   .html(function (d) {
+    //     return (`${d.state}<br>Poverty: ${d.age} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
+    //   }); // closing squigly bracket for .html(function(d)
+    // } // closing squigly bracket for else if statement
+    // else if (chosenXAxis === "income") {
+    //   label = "Household Income (Median):";
 
-  //     var toolTip = d3.tip()
-  //     .attr("class", "tooltip")
-  //     .offset([80, -60])
-  //     // changed d to data in function argument - didn't change anything so changed back
-  //     .html(function (d) {
-  //       return (`${d.state}<br>Poverty: ${d.income} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-  //     }); // closing squigly bracket for .html(function(d)
-  //   } // closing squigly bracket for else if statement
+    //   var toolTip = d3.tip()
+    //   .attr("class", "tooltip")
+    //   .offset([80, -60])
+    //   // changed d to data in function argument - didn't change anything so changed back
+    //   .html(function (d) {
+    //     return (`${d.state}<br>Poverty: ${d.income} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
+    //   }); // closing squigly bracket for .html(function(d)
+    // } // closing squigly bracket for else if statement
 
   //   // NOT TESTED YET
-  //   circlesGroup.call(toolTip);
-  //   // changed from circlesGroup to chartGroup -- NOT VERIFIED UNTIL STATE ABBR DISPLAYS
-  //   chartGroup.on("mouseover", function (data) {
-  //     // DEBUG!! -- ERROR MESSAGE IN CONSOLE. This was working, why not now?
-  //     toolTip.show(data);
-  //   }) // closing squigly bracket for mouseover event handler
-  //     // onmouseout event
-  //     .on("mouseout", function (data, index) {
-  //       toolTip.hide(data);
-  //     }); // closing squigly bracket for mouseout event handler
-
-  //   return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
+    // circlesGroup.call(toolTip);
+    // changed from circlesGroup to chartGroup -- NOT VERIFIED UNTIL STATE ABBR DISPLAYS
+    
+    // return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
   // }
 
   // VERIFIED AS WORKING
@@ -245,6 +238,15 @@ function makeResponsive() {
       .attr("class", function(d) {
         return "stateCircle " + d.abbr;
       })
+
+      .on("mouseover", function (data) {
+        toolTip.show(data);
+      }) // closing squigly bracket for mouseover event handler
+        // onmouseout event
+      .on("mouseout", function (data, index) {
+        toolTip.hide(data);
+      }); // closing squigly bracket for mouseout event handler
+  
       // .append("text")  // append a text tag with the following properties.
       //   fontSize: 12,
       //   color: black,
@@ -253,7 +255,7 @@ function makeResponsive() {
       // .html(function(d) {
       //   return `<p>${d => d.abbr}</p>`;
       // });
-     .text (d => `${d.abbr}`); // also tried d => d.abbr
+    //  .text (d => `${d.abbr}`); // also tried d => d.abbr
     //  DEBUG!! -- State abbr not displaying on chart
 
     // DEBUG!! -- State abbr not displaying on chart
@@ -269,7 +271,14 @@ function makeResponsive() {
     .attr("class", "text-label") // moved from .append to after .text
     .attr("text-anchor", "middle") // moved to after .text
     .attr("fill", "black")
-    .attr("font-family", "sans-serif");
+    .attr("font-family", "sans-serif")
+    .on("mouseover", function (data) {
+      toolTip.show(data);
+    }) // closing squigly bracket for mouseover event handler
+      // onmouseout event
+    .on("mouseout", function (data, index) {
+      toolTip.hide(data);
+    }); // closing squigly bracket for mouseout event handler
 
     // VERIFIED AS WORKING
     // Create group for 3 x-axis labels
