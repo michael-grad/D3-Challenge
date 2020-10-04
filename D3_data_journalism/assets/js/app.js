@@ -32,7 +32,6 @@ function makeResponsive() {
   // Initial Params
   var chosenXAxis = "poverty"; // initialize variable for initial x axis before choosing
 
-  // DEBUG!! -- added and now 2nd x axis not working
   var chosenYAxis = "healthcare"; // initialize variable for initial y axis before choosing
 
   // VERIFIED AS WORKING
@@ -48,7 +47,7 @@ function makeResponsive() {
     return xLinearScale;
   } // closing squigly bracket for function xScale
 
-  // NOT TESTED YET - SHOULD BE WORKING
+  // VERIFIED AS WORKING
   // Every time this function is called the same parameters are used
   function yScale(chartData, chosenYAxis) {
     // create scales
@@ -61,7 +60,7 @@ function makeResponsive() {
     return yLinearScale;
   } // closing squigly bracket for function yScale
 
-  // NOT TESTED YET - SHOULD BE WORKING
+  // VERIFIED AS WORKING
   // Every time this function is called the same parameters are used
   // function used for updating xAxis var upon click on axis label
   function renderXAxes(newXScale, xAxis) {
@@ -74,7 +73,7 @@ function makeResponsive() {
     return xAxis;
   } // closing squigly bracket for function renderXAxes
 
-  // NOT TESTED YET - SHOULD BE WORKING
+  // VERIFIED AS WORKING
   // Every time this function is called the same parameters are used
   // function used for updating yAxis var upon click on axis label
   function renderYAxes(newYScale, yAxis) {
@@ -87,7 +86,7 @@ function makeResponsive() {
     return yAxis;
   } // closing squigly bracket for function renderYAxes
 
-  // NOT TESTED YET - SHOULD BE WORKING
+  // VERIFIED AS WORKING
   // Every time this function is called the same parameters are used
   // function used for updating circles group with a transition to
   // new circles
@@ -95,16 +94,12 @@ function makeResponsive() {
 
     circlesGroup.transition()
       .duration(1000)
-      // DEBUG!! -- Upon clicking alternate xLabel, this line has error message in console
-      //            Cannot read property 'age' of undefined
       .attr("cx", d => newXScale(d[chosenXAxis]))
       // console.log(chosenYAxis);
       .attr("cy", d => newYScale(d[chosenYAxis])); // changed [chosenYAxis] to d.healthcare - no impact
 
       stateGroup.transition()
       .duration(1000)
-      // DEBUG!! -- Upon clicking alternate xLabel, this line has error message in console
-      //            Cannot read property 'age' of undefined
       .attr("dx", d => newXScale(d[chosenXAxis]))
       // console.log(chosenYAxis);
       .attr("dy", d => newYScale(d[chosenYAxis])); // changed [chosenYAxis] to d.healthcare - no impact
@@ -127,42 +122,11 @@ function makeResponsive() {
     var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
-    // ADDED (d,i) - that did not solve d.state issue.  removed (d,i)
     .html(function (d) {
-      // DEBUG!! -- CANNOT READ d.state.  THIS WAS WORKING - why is it not now?
       return (`${d.state}<br>Poverty: ${d[chosenXAxis]} <br>Lacks Healthcare: ${d[chosenYAxis]}`);
     }); // closing squigly bracket for .html(function(d)
     svg.call(toolTip);
-    // closing squigly bracket for if statement
-    // else if (chosenXAxis === "age") {
-    //   label = "Age (Median):";
-
-    //   var toolTip = d3.tip()
-    //   .attr("class", "tooltip")
-    //   .offset([80, -60])
-    //   .html(function (d) {
-    //     return (`${d.state}<br>Poverty: ${d.age} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-    //   }); // closing squigly bracket for .html(function(d)
-    // } // closing squigly bracket for else if statement
-    // else if (chosenXAxis === "income") {
-    //   label = "Household Income (Median):";
-
-    //   var toolTip = d3.tip()
-    //   .attr("class", "tooltip")
-    //   .offset([80, -60])
-    //   // changed d to data in function argument - didn't change anything so changed back
-    //   .html(function (d) {
-    //     return (`${d.state}<br>Poverty: ${d.income} <br>Lacks Healthcare: ${d.healthcare} ${d[chosenXAxis]}`);
-    //   }); // closing squigly bracket for .html(function(d)
-    // } // closing squigly bracket for else if statement
-
-  //   // NOT TESTED YET
-    // circlesGroup.call(toolTip);
-    // changed from circlesGroup to chartGroup -- NOT VERIFIED UNTIL STATE ABBR DISPLAYS
     
-    // return circlesGroup; // changed from chartGroup to circlesGroup.  Now the circles transition when clicking x axis label
-  // }
-
   // VERIFIED AS WORKING
   // Retrieve data from the CSV file and execute everything below
   d3.csv("assets/data/data.csv").then(function (chartData, err) {
@@ -192,14 +156,14 @@ function makeResponsive() {
     // xLinearScale function above csv import
     var xLinearScale = xScale(chartData, chosenXAxis);
 
-    // NOT TESTED YET - SHOULD BE WORKING
+    // VERIFIED AS WORKING
     // Create y scale function
     var yLinearScale = yScale(chartData, chosenYAxis);
     // var yLinearScale = d3.scaleLinear(chartData, chosenYAxis)
     // .domain([0, d3.max(chartData, d => d.healthcare)])
     // .range([height, 0]);
 
-    // NOT TESTED YET - SHOULD BE WORKING
+    // VERIFIED AS WORKING
     // NOTE:  leftAxis also defined under function renderYAxes
     // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
@@ -228,17 +192,14 @@ function makeResponsive() {
       .enter()
       .append("circle")
       .attr("cx", d => xLinearScale(d[chosenXAxis]))
-      // DEBUG!! -- // changed and now 2nd x axis not working
       .attr("cy", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
       .attr("r", 20)
       .attr("fill", "pink")
       .attr("opacity", ".5")
-      // DEBUG!! -- State abbr not dispalying on chart, but is in the html in inspector
       // append text modeled after Activity 16.2.1
       .attr("class", function(d) {
         return "stateCircle " + d.abbr;
       })
-
       .on("mouseover", function (data) {
         toolTip.show(data);
       }) // closing squigly bracket for mouseover event handler
@@ -247,6 +208,10 @@ function makeResponsive() {
         toolTip.hide(data);
       }); // closing squigly bracket for mouseout event handler
   
+
+      // **********************************
+      // Attempt as adding state abbr label
+      // **********************************
       // .append("text")  // append a text tag with the following properties.
       //   fontSize: 12,
       //   color: black,
@@ -256,9 +221,12 @@ function makeResponsive() {
       //   return `<p>${d => d.abbr}</p>`;
       // });
     //  .text (d => `${d.abbr}`); // also tried d => d.abbr
-    //  DEBUG!! -- State abbr not displaying on chart
 
-    // DEBUG!! -- State abbr not displaying on chart
+      // ****************************************
+      // Code block below adds state abbreviation
+      // ****************************************
+
+    // VERIFIED AS WORKING
     var stateGroup = chartGroup.selectAll(".text-label")
     .data(chartData)
     .enter()
@@ -266,7 +234,6 @@ function makeResponsive() {
     .text(function(d) {
       return d.abbr;}) // removed ; between abbr and }
     .attr("dx", d => xLinearScale(d[chosenXAxis]))
-    // // DEBUG!! -- // changed and now 2nd x axis not working
     .attr("dy", d => yLinearScale(d[chosenYAxis])) // changed from d.healthcare to d[chosenYAxis]
     .attr("class", "text-label") // moved from .append to after .text
     .attr("text-anchor", "middle") // moved to after .text
@@ -311,16 +278,12 @@ function makeResponsive() {
       .classed("inactive", true)
       .text("Household Income (Median)");
 
-    // DEBUG!! -- not in correct location
-    //         -- should be x, y
-    //         -- displayed at bottom (not centered) and left of axis
     // Create group for 3 y-axis labels
     var labelsYGroup = chartGroup.append("g")
       .attr("transform", `translate(${0 - 20}, ${height / 30})`) // changed from /2 to /30 to center along y axis
       // .classed("centered", true);
       .style("text-anchor", "middle"); // added .style to center text in g tag
 
-    // DEBUG!! -- was working, now no longer displayed  
     // append y axis
     // changed from chartGroup.append("text")
     var healthcareLabel = labelsYGroup.append("text")
@@ -335,7 +298,7 @@ function makeResponsive() {
       .classed("axis-text", true)
       .classed("active", true)
       .text("Lacks Healthcare (%)");
-    // DEBUG!! -- added and now 2nd x axis not working
+
     var smokesLabel = labelsYGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - 65)
@@ -356,8 +319,8 @@ function makeResponsive() {
       .classed("inactive", true)
       .text("Obese (%)");
 
-    // NOT TESTED YET - SHOULD BE WORKING
-    // updateToolTip function above csv import.  Removed var from line 183
+    // VERIFIED AS WORKING
+    // updateToolTip function above csv import.
     // var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
     // x axis labels event listener
     labelsXGroup.selectAll("text")
@@ -380,15 +343,13 @@ function makeResponsive() {
           // updates x axis with transition
           xAxis = renderXAxes(xLinearScale, xAxis);
 
-          // DEBUG: WAS WORKING, NOT ANYMORE
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis, stateGroup);
 
-          // DEBUG: Y AXIS LABELS NOT CENTERED
           // updates tooltips with new info
           // circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
-          // COMMENTED OUT: PROBLEM SOLVE
+          // VERIFIED AS WORKING
           // change classes to change bold text
             if (chosenXAxis === "age") {
               ageLabel
@@ -454,6 +415,7 @@ function makeResponsive() {
           // updates tooltips with new info
           // circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+          // VERIFIED AS WORKING
           // change classes to change bold text
           if (chosenYAxis === "smokes") {
             smokesLabel
